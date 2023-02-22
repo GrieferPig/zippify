@@ -1,0 +1,26 @@
+[package]
+name = "zippify"
+version = "0.1.0"
+edition = "2021"
+authors = ["GrieferPig <grieferpig@163.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+egui = "0.19"
+egui_glow = "0.19"
+vst = "0.3"
+raw-window-handle = "0.4.2"
+image = "0.24.5"
+baseview = { git = "https://github.com/RustAudio/baseview.git", rev = "eae4033e7d2cc9c31ccaa2794d5d08eedf2f510c" }
+egui-baseview = {git = "https://github.com/BillyDM/egui-baseview", features = ["opengl"] }
+
+[lib]
+name = "zippify"
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = 'z'     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic
