@@ -112,6 +112,8 @@ impl Plugin for Zippify {
     }
 }
 
+// Boilerplate code, do not modify
+
 struct VstParent(*mut ::std::ffi::c_void);
 
 #[cfg(target_os = "macos")]

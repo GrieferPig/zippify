@@ -72,24 +72,6 @@ pub fn process(
         out_buf_r[index] = in_buf_r_sample.clamp(-clamp_range, clamp_range);
     }
 
-    if lose_precision > 0.5 {
-        // Lose precision L
-        for out_buf_l_sample in &mut *out_buf_l {
-            // multiply by 0xff and convert to u8
-            let sample = (*out_buf_l_sample * 0x2f as f32) as i8;
-            // convert to f32 and divide by 0xff
-            *out_buf_l_sample = f32::from(sample) / 0x2f as f32;
-        }
-
-        // Lose precision R
-        for out_buf_r_sample in &mut *out_buf_r {
-            // multiply by 0xff and convert to u8
-            let sample = (*out_buf_r_sample * 0x2f as f32) as i8;
-            // convert to f32 and divide by 0xff
-            *out_buf_r_sample = f32::from(sample) / 0x2f as f32;
-        }
-    }
-
     // gain
     for out_buf_l_sample in &mut *out_buf_l {
         *out_buf_l_sample *= params.gain.get();
@@ -97,6 +79,19 @@ pub fn process(
 
     for out_buf_r_sample in &mut *out_buf_r {
         *out_buf_r_sample *= params.gain.get();
+    }
+
+    // Lose precision
+    if lose_precision > 0.5 {
+        for out_buf_l_sample in &mut *out_buf_l {
+            let sample = (*out_buf_l_sample * 0x0f as f32) as i8;
+            *out_buf_l_sample = f32::from(sample) / 0x0f as f32;
+        }
+
+        for out_buf_r_sample in &mut *out_buf_r {
+            let sample = (*out_buf_r_sample * 0x0f as f32) as i8;
+            *out_buf_r_sample = f32::from(sample) / 0x0f as f32;
+        }
     }
 
     // Mix
